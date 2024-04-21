@@ -16,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           // entities: ['./module/**/*.entity{.ts,.js}'], // do this for manual loading of enitites
           autoLoadEntities: true,
           synchronize: configService.getOrThrow('MYSQL_SYNC'),
+          logging: false,
         };
       },
       inject: [ConfigService],

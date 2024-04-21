@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { PostMeta } from './post-meta.entity';
-import { AbstractEntity } from 'src/database/abstract.entity';
+import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { Comment } from './comment-entity';
 import { Tag } from './tag.entity';
 
