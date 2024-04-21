@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  gap-mysql:
+    image: mysql:latest
+    container_name: gap-mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - '~/Projects/gap-projects/db/mysql/:/var/lib/mysql'
+    env_file:
+      - .env
