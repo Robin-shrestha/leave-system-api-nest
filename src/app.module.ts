@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './module/user/user.module';
 import { PostModule } from './module/post/post.module';
 
 import { DataSource } from 'typeorm';
 import { AuthModule } from './module/auth/auth.module';
 import { DatabaseModule } from './module/database/database.module';
-import { JwtModule } from '@nestjs/jwt';
 
 export const appDataSource = new DataSource({
   type: 'mysql',
@@ -25,14 +24,6 @@ export const appDataSource = new DataSource({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-    }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.getOrThrow<string>('JWT_SECRET_KEY'),
-        global: true,
-      }),
-      inject: [ConfigService],
     }),
 
     DatabaseModule,

@@ -10,11 +10,13 @@ import {
   ParseIntPipe,
   UseInterceptors,
 } from '@nestjs/common';
+
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { DatabaseExceptionFilter } from 'src/exception-filters/dabatase-excetion.filter';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { Role, Roles } from '../auth/decorators/Roles.decorator';
+import { DatabaseExceptionFilter } from 'src/exception-filters/dabatase-excetion.filter';
 import { LoggingInterceptorInterceptor } from 'src/interceptors/logginginterceptor/loggingInterceptor.interceptor';
 
 @Controller('post')
@@ -28,11 +30,13 @@ export class PostController {
     return this.postService.create(createPostDto);
   }
 
+  @Roles()
   @Get()
   findAll() {
     return this.postService.findAll();
   }
 
+  @Roles(Role.USER)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.postService.findOne(+id);
