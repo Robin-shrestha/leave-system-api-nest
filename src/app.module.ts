@@ -1,12 +1,12 @@
+import { DataSource } from 'typeorm';
 import { Module } from '@nestjs/common';
+import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './module/user/user.module';
 import { PostModule } from './module/post/post.module';
-
-import { DataSource } from 'typeorm';
 import { AuthModule } from './module/auth/auth.module';
+import { RolesModule } from './module/roles/roles.module';
 import { DatabaseModule } from './module/database/database.module';
-
 export const appDataSource = new DataSource({
   type: 'mysql',
   host: process.env.MYSQL_HOST,
@@ -31,9 +31,10 @@ export const appDataSource = new DataSource({
     AuthModule,
     UserModule,
     PostModule,
+    RolesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {}
 

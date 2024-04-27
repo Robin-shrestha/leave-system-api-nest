@@ -1,27 +1,51 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { Users } from './entities/users.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from './entities/users.entity';
-import { Repository } from 'typeorm';
+import { RolesService } from '../roles/roles.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { BaseServiceOptions } from 'src/types/serviceOptions.types';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    private readonly rolesServices: RolesService,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    const { roles, ...rest } = createUserDto;
+
+    const rolesEntity = await Promise.all(
+      roles.map((roleId) => this.rolesServices.findOne(roleId)),
+    );
+
+    const userEntity = this.userRepository.create({
+      ...rest,
+      roles: rolesEntity,
+    });
+
+    return this.userRepository.save(userEntity);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  findAll(options?: BaseServiceOptions) {
+    return this.userRepository.find({
+      withDeleted: options?.showDeleted,
+    });
   }
 
   async findOne(id: number) {
-    return this.userRepository.findOneByOrFail({ id });
+    return this.userRepository.findOneOrFail({
+      where: { id },
+      relations: {
+        roles: true,
+      },
+      select: {
+        roles: { role: true, id: true },
+      },
+    });
   }
 
   async findOneByUsername(username: string) {
@@ -37,7 +61,13 @@ export class UserService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const userToBeDeleted = await this.findOne(id);
+    console.log(
+      '🚀 ~ UserService ~ remove ~ userToBeDeleted:',
+      userToBeDeleted,
+    );
+    const res = await this.userRepository.softRemove(userToBeDeleted);
+    console.log('🚀 ~ UserService ~ remove ~ res:', res);
   }
 }
