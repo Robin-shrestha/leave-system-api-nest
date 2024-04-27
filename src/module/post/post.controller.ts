@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  UseFilters,
   ParseIntPipe,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,11 +15,9 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { Role, Roles } from '../auth/decorators/Roles.decorator';
-import { DatabaseExceptionFilter } from 'src/exception-filters/dabatase-excetion.filter';
 import { LoggingInterceptorInterceptor } from 'src/interceptors/logginginterceptor/loggingInterceptor.interceptor';
 
 @Controller('post')
-@UseFilters(DatabaseExceptionFilter)
 @UseInterceptors(LoggingInterceptorInterceptor)
 export class PostController {
   constructor(private readonly postService: PostService) {}
