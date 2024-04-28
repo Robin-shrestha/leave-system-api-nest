@@ -1,3 +1,4 @@
+import { Country } from 'src/module/country/entities/country.entity';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { Roles } from 'src/module/roles/entity/roles.entity';
 import {
@@ -43,4 +44,12 @@ export class Users extends AbstractEntity<Users> {
   @ManyToOne(() => Users, (user) => user.id, { cascade: true })
   @JoinColumn({ name: 'created_by' })
   createdBy?: Users;
+
+  @ManyToOne(() => Country, (country) => country.countryCode, {
+    nullable: false,
+  })
+  @JoinColumn({
+    name: 'country',
+  })
+  country: Country;
 }

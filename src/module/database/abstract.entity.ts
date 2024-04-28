@@ -12,7 +12,7 @@ export class AbstractEntity<T> {
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp' })
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', select: false })
   deletedAt: Date | null;
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })

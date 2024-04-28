@@ -12,15 +12,15 @@ export class CountryService {
 
   async create(createCountryDto: CreateCountryDto) {
     const country = this.countryRepository.create(createCountryDto);
-    return this.countryRepository.insert(country);
+    await this.countryRepository.insert(country);
   }
 
   findByCountryCode(countryCode: string) {
     return this.countryRepository.findOneByOrFail({ countryCode });
   }
 
-  findByCountry(country: string) {
-    return this.countryRepository.findOneByOrFail({ country });
+  findByCountry(countryName: string) {
+    return this.countryRepository.findOneByOrFail({ countryName });
   }
 
   findAll() {

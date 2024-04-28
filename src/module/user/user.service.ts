@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { RolesService } from '../roles/roles.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseServiceOptions } from 'src/types/serviceOptions.types';
+import { CountryService } from '../country/country.service';
 
 @Injectable()
 export class UserService {
@@ -13,10 +14,13 @@ export class UserService {
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
     private readonly rolesServices: RolesService,
+    private readonly countryServices: CountryService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { roles, ...rest } = createUserDto;
+    const { roles, country, ...rest } = createUserDto;
+
+    const countryEntity = await this.countryServices.findByCountryCode(country);
 
     const rolesEntity = await Promise.all(
       roles.map((roleId) => this.rolesServices.findOne(roleId)),
@@ -25,6 +29,7 @@ export class UserService {
     const userEntity = this.userRepository.create({
       ...rest,
       roles: rolesEntity,
+      country: countryEntity,
     });
 
     return this.userRepository.save(userEntity);
@@ -33,6 +38,9 @@ export class UserService {
   findAll(options?: BaseServiceOptions) {
     return this.userRepository.find({
       withDeleted: options?.showDeleted,
+      relations: {
+        country: true,
+      },
     });
   }
 
@@ -40,6 +48,7 @@ export class UserService {
     return this.userRepository.findOneOrFail({
       where: { id },
       relations: {
+        country: true,
         roles: true,
       },
       select: {

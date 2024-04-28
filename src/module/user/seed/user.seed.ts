@@ -10,6 +10,7 @@ const defaultUsers: CreateUserDto[] = [
     address: 'Ap #587-5403 Faucibus Av.',
     roles: [1, 2],
     designation: 'Software Engineer',
+    country: 'US',
     dateOfBirth: '2000-10-10',
   },
   {
@@ -19,6 +20,7 @@ const defaultUsers: CreateUserDto[] = [
     address: 'Ap #812-9878 Convallis Av.',
     roles: [1, 3],
     designation: 'Software Engineer',
+    country: 'NP',
     dateOfBirth: '2000-10-11',
   },
   {
@@ -28,6 +30,7 @@ const defaultUsers: CreateUserDto[] = [
     address: 'Ap #300-9086 Imperdiet Avenue',
     roles: [1],
     designation: 'Software Engineer',
+    country: 'NP',
     dateOfBirth: '2000-02-10',
   },
   {
@@ -37,6 +40,7 @@ const defaultUsers: CreateUserDto[] = [
     address: 'Ap #884-4114 Egestas St.',
     roles: [1],
     designation: 'Software Engineer',
+    country: 'NP',
     dateOfBirth: '2000-10-21',
   },
   {
@@ -46,6 +50,7 @@ const defaultUsers: CreateUserDto[] = [
     address: '908-9050 At St.',
     roles: [1],
     designation: 'Software Engineer',
+    country: 'NP',
     dateOfBirth: '1998-10-16',
   },
 ];

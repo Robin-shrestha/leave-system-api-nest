@@ -40,6 +40,6 @@ export class RolesService {
   create(role: RolesDto) {
     const roles = this.rolesRepository.create(role);
 
-    return this.rolesRepository.save(roles);
+    this.rolesRepository.insert(roles);
   }
 }
