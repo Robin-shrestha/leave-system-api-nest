@@ -26,18 +26,14 @@ const fiscalYear: CreateFiscalYearDto[] = [
 @Injectable()
 export class FiscalYearSeed {
   private readonly logger = new Logger(FiscalYearSeed.name);
-  constructor(private readonly fiscalYearSErvice: FiscalYearService) {}
+  constructor(private readonly fiscalYearService: FiscalYearService) {}
 
   async seedFiscalYear() {
-    const existingCountries = await this.fiscalYearSErvice.findAll();
-    console.log(
-      '🚀 ~ FiscalYearSeed ~ seedFiscalYear ~ existingCountries:',
-      existingCountries,
-    );
+    const existingCountries = await this.fiscalYearService.findAll();
 
     if (!existingCountries.length) {
       await Promise.all(
-        fiscalYear.map((fy) => this.fiscalYearSErvice.create(fy)),
+        fiscalYear.map((fy) => this.fiscalYearService.create(fy)),
       );
       this.logger.log(
         `Fiscal Year seeded: ${fiscalYear.map((fy) => fy.fiscalYear).join(', ')}`,

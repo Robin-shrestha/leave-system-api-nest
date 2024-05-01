@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { RolesDto } from './dto/roles.dto';
+import { CreateRolesDto } from './dto/roles.dto';
 import { Roles } from './entity/roles.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
@@ -37,7 +37,7 @@ export class RolesService {
     return await Promise.all(roleEntitiesMap);
   }
 
-  async create(role: RolesDto) {
+  async create(role: CreateRolesDto) {
     const roles = this.rolesRepository.create(role);
 
     await this.rolesRepository.insert(roles);

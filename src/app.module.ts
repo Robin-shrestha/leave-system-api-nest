@@ -10,10 +10,11 @@ import { AuthModule } from './module/auth/auth.module';
 import { RolesModule } from './module/roles/roles.module';
 import { CountryModule } from './module/country/country.module';
 import { DatabaseModule } from './module/database/database.module';
+import { HolidaysModule } from './module/holidays/holidays.module';
+import { FiscalYearModule } from './module/fiscal-year/fiscal-year.module';
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
 import { DefaultExceptionFilter } from './exception-filters/default-exception.filter';
 import { DatabaseExceptionFilter } from './exception-filters/database-excpetion.filter';
-import { FiscalYearModule } from './module/fiscal-year/fiscal-year.module';
 
 export const appDataSource = new DataSource({
   type: 'mysql',
@@ -41,6 +42,7 @@ export const appDataSource = new DataSource({
     RolesModule,
     CountryModule,
     FiscalYearModule,
+    HolidaysModule,
   ],
   controllers: [],
   providers: [

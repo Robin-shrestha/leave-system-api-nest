@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
-export class RolesDto {
+
+export class CreateRolesDto {
   @IsNotEmpty()
   role: string;
 }
