@@ -37,9 +37,9 @@ export class RolesService {
     return await Promise.all(roleEntitiesMap);
   }
 
-  create(role: RolesDto) {
+  async create(role: RolesDto) {
     const roles = this.rolesRepository.create(role);
 
-    this.rolesRepository.insert(roles);
+    await this.rolesRepository.insert(roles);
   }
 }

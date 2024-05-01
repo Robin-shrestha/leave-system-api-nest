@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Users } from 'src/module/user/entities/users.entity';
+import { FiscalYear } from 'src/module/fiscal-year/entities/fiscal-year.entity';
 
 @Entity()
 export class Country {
@@ -17,4 +18,7 @@ export class Country {
 
   @OneToMany(() => Users, (user) => user.country)
   users: Users[];
+
+  @OneToMany(() => FiscalYear, (fiscalYear) => fiscalYear.country)
+  fiscalYear: FiscalYear[];
 }

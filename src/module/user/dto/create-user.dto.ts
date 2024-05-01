@@ -7,6 +7,8 @@ import {
   IsDateString,
   ArrayNotEmpty,
 } from 'class-validator';
+import { validationErrors } from 'src/constants/validationMessages';
+import { interpolate } from 'src/utils';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -17,7 +19,14 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty()
-  @IsDateString({}, { message: 'dateOfBirth be in "YYYY-MM-DD" format' })
+  @IsDateString(
+    {},
+    {
+      message: interpolate(validationErrors.DATE_FORMAT, {
+        key: 'dateOfBirth',
+      }),
+    },
+  )
   dateOfBirth: string;
 
   @IsNotEmpty()
