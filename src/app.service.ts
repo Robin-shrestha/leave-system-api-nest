@@ -4,6 +4,8 @@ import { RoleSeeds } from './module/roles/seed/roles.seed';
 import { CountrySeed } from './module/country/seed/country.seed';
 import { HolidaysSeed } from './module/holidays/seed/holidays.seed';
 import { FiscalYearSeed } from './module/fiscal-year/seed/fiscal-year.seed';
+import { LeaveTypesSeed } from './module/leave-types/seed/leave-types.seed';
+import { LeavePolicySeed } from './module/leave-policy/seed/leave-policy.seed';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -13,6 +15,8 @@ export class AppService implements OnModuleInit {
     private readonly countrySeeds: CountrySeed,
     private readonly fiscalYearSeed: FiscalYearSeed,
     private readonly holidaysSeed: HolidaysSeed,
+    private readonly leaveTypesSeed: LeaveTypesSeed,
+    private readonly leavePolicySeed: LeavePolicySeed,
   ) {}
 
   async onModuleInit(): Promise<void> {
@@ -23,8 +27,12 @@ export class AppService implements OnModuleInit {
   async seedData(): Promise<void> {
     await this.countrySeeds.seedCountry();
     await this.roleSeeds.seedRoles();
+
+    await this.leaveTypesSeed.seedLeaveTypes();
     await this.fiscalYearSeed.seedFiscalYear();
     await this.holidaysSeed.seedHolidays();
+
+    await this.leavePolicySeed.seedLeavePolicy();
     await this.userSeeds.seedUsers();
   }
 }

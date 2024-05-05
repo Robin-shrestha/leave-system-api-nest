@@ -1,6 +1,7 @@
 import { Country } from 'src/module/country/entities/country.entity';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { Holidays } from 'src/module/holidays/entities/holiday.entity';
+import { LeavePolicy } from 'src/module/leave-policy/entities/leave-policy.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
@@ -20,6 +21,9 @@ export class FiscalYear extends AbstractEntity<FiscalYear> {
   @JoinColumn({ name: 'country' })
   country: Country;
 
-  @OneToMany(() => Holidays, (holiday) => holiday.id)
-  holiday: Holidays;
+  @OneToMany(() => Holidays, (holiday) => holiday.fiscalYear)
+  holiday: Holidays[];
+
+  @OneToMany(() => LeavePolicy, (leavePolicy) => leavePolicy.fiscalYear)
+  leavePolicy: LeavePolicy[];
 }

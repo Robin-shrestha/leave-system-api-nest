@@ -25,7 +25,7 @@ export class HolidaysService {
   }
 
   findAll() {
-    return this.holidayRepository.find();
+    return this.holidayRepository.find({ relations: { fiscalYear: true } });
   }
 
   findOne(id: number) {

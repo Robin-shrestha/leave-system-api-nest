@@ -46,10 +46,15 @@ export class FiscalYearService {
   }
 
   findAll() {
-    return this.fiscalYearRepository.find();
+    return this.fiscalYearRepository.find({
+      relations: { country: true, holiday: true },
+    });
   }
 
   findOne(id: number) {
-    return this.fiscalYearRepository.findOneByOrFail({ id });
+    return this.fiscalYearRepository.findOneOrFail({
+      where: { id },
+      relations: { country: true, holiday: true },
+    });
   }
 }

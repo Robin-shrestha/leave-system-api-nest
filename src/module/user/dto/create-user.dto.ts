@@ -6,9 +6,11 @@ import {
   IsArray,
   IsDateString,
   ArrayNotEmpty,
+  IsEnum,
 } from 'class-validator';
 import { validationErrors } from 'src/constants/validationMessages';
 import { interpolate } from 'src/utils';
+import { Gender } from '../entities/users.entity';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -43,9 +45,13 @@ export class CreateUserDto {
 
   @IsArray()
   @ArrayNotEmpty()
-  roles: number[];
+  roleIds: number[];
 
   @Length(2, 2)
   @IsNotEmpty()
   country: string;
+
+  @IsEnum(Gender)
+  @IsNotEmpty()
+  gender: Gender;
 }

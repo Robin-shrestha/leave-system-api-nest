@@ -18,12 +18,12 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { roles, country, ...rest } = createUserDto;
+    const { roleIds, country, ...rest } = createUserDto;
 
     const countryEntity = await this.countryServices.findByCountryCode(country);
 
     const rolesEntity = await Promise.all(
-      roles.map((roleId) => this.rolesServices.findOne(roleId)),
+      roleIds.map((roleId) => this.rolesServices.findOne(roleId)),
     );
 
     const userEntity = this.userRepository.create({
@@ -67,7 +67,7 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return `This action updates a #${id} user ${updateUserDto}`;
   }
 
   async remove(id: number) {

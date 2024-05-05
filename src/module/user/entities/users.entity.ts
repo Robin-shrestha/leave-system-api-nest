@@ -10,6 +10,12 @@ import {
   ManyToOne,
 } from 'typeorm';
 
+export enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHERS = 'others',
+}
+
 @Entity()
 export class Users extends AbstractEntity<Users> {
   @Column({ length: 120, nullable: false })
@@ -17,6 +23,13 @@ export class Users extends AbstractEntity<Users> {
 
   @Column({ length: 150, nullable: false, unique: true })
   email: string;
+
+  @Column({
+    type: 'enum',
+    enum: Gender,
+    nullable: false,
+  })
+  gender: Gender;
 
   @Column({ name: 'profile_picture', nullable: true })
   profilePicture: string;
@@ -27,6 +40,7 @@ export class Users extends AbstractEntity<Users> {
   @Column()
   address: string;
 
+  // This can be normalized
   @Column()
   designation: string;
 

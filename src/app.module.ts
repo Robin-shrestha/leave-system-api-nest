@@ -5,7 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { AppService } from './app.service';
 import { UserModule } from './module/user/user.module';
-import { PostModule } from './module/post/post.module';
+// import { PostModule } from './module/post/post.module';
+
 import { AuthModule } from './module/auth/auth.module';
 import { RolesModule } from './module/roles/roles.module';
 import { CountryModule } from './module/country/country.module';
@@ -15,6 +16,8 @@ import { FiscalYearModule } from './module/fiscal-year/fiscal-year.module';
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
 import { DefaultExceptionFilter } from './exception-filters/default-exception.filter';
 import { DatabaseExceptionFilter } from './exception-filters/database-excpetion.filter';
+import { LeavePolicyModule } from './module/leave-policy/leave-policy.module';
+import { LeaveTypesModule } from './module/leave-types/leave-types.module';
 
 export const appDataSource = new DataSource({
   type: 'mysql',
@@ -38,11 +41,13 @@ export const appDataSource = new DataSource({
 
     AuthModule,
     UserModule,
-    PostModule,
+    // PostModule,
     RolesModule,
     CountryModule,
     FiscalYearModule,
     HolidaysModule,
+    LeavePolicyModule,
+    LeaveTypesModule,
   ],
   controllers: [],
   providers: [

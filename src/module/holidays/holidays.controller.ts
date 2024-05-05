@@ -11,7 +11,7 @@ import { HolidaysService } from './holidays.service';
 import { CreateHolidayDto } from './dto/create-holiday.dto';
 import { UpdateHolidayDto } from './dto/update-holiday.dto';
 
-@Controller('holiday')
+@Controller('holidays')
 export class HolidaysController {
   constructor(private readonly holidaysService: HolidaysService) {}
 
