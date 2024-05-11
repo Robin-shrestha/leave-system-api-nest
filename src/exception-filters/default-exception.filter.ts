@@ -16,7 +16,7 @@ export class DefaultExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    this.logger.log(`${exception.message}`);
+    this.logger.error(`${exception.message}`);
 
     const responsePayload: ResponseError = {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

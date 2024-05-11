@@ -18,7 +18,7 @@ export class DatabaseExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    this.logger.log(`${exception.name}: ${exception.message}`);
+    this.logger.error(`${exception.name}: ${exception.message}`);
 
     const errorPayload: ResponseError = {
       statusCode: HttpStatus.UNPROCESSABLE_ENTITY,

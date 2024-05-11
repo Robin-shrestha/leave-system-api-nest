@@ -32,22 +32,7 @@ export class LeavePolicyService {
 
   findAll(options?: BaseServiceOptions) {
     return this.leavePolicyRepository.find({
-      withDeleted: !!options.showDeleted,
-      select: {
-        fiscalYear: {
-          id: true,
-          country: { countryCode: true, countryName: true },
-          endDate: true,
-          startDate: true,
-          fiscalYear: true,
-        },
-        leaveType: {
-          affectedGender: true,
-          id: true,
-          leavePolicy: true,
-          type: true,
-        },
-      },
+      withDeleted: !!options?.showDeleted,
       relations: {
         fiscalYear: {
           country: true,
@@ -60,21 +45,6 @@ export class LeavePolicyService {
   findOne(id: number) {
     return this.leavePolicyRepository.findOneOrFail({
       where: { id },
-      select: {
-        fiscalYear: {
-          id: true,
-          country: { countryCode: true, countryName: true },
-          endDate: true,
-          startDate: true,
-          fiscalYear: true,
-        },
-        leaveType: {
-          affectedGender: true,
-          id: true,
-          leavePolicy: true,
-          type: true,
-        },
-      },
       relations: {
         fiscalYear: {
           country: true,
@@ -90,19 +60,22 @@ export class LeavePolicyService {
     });
     const { fiscalYearId, leaveTypeId, ...rest } = updateLeavePolicyDto;
 
-    const fiscalYearEntity = await this.fiscalYearService.findOne(fiscalYearId);
+    if (fiscalYearId) {
+      leavePolicy.fiscalYear =
+        await this.fiscalYearService.findOne(fiscalYearId);
+    }
 
-    const leaveTypeEntity = await this.leaveTypesService.findOne(leaveTypeId);
+    if (leaveTypeId) {
+      leavePolicy.leaveType = await this.leaveTypesService.findOne(leaveTypeId);
+    }
 
     return this.leavePolicyRepository.save({
       ...leavePolicy,
       ...rest,
-      fiscalYear: fiscalYearEntity,
-      leaveType: leaveTypeEntity,
     });
   }
 
-  remove(id: number) {
-    this.leavePolicyRepository.softDelete(id);
+  async remove(id: number) {
+    await this.leavePolicyRepository.softDelete(id);
   }
 }

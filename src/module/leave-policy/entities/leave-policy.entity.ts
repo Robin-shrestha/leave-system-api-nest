@@ -1,7 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  Unique,
+} from 'typeorm';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { FiscalYear } from 'src/module/fiscal-year/entities/fiscal-year.entity';
 import { LeaveType } from 'src/module/leave-types/entities/leave-type.entity';
+import { UserLeave } from 'src/module/user-leave/entities/user-leave.entity';
 
 @Entity()
 @Unique('leave_year', ['fiscalYear', 'leaveType'])
@@ -31,4 +39,7 @@ export class LeavePolicy extends AbstractEntity<LeavePolicy> {
 
   @Column({ type: 'tinyint' })
   count: number;
+
+  @OneToMany(() => UserLeave, (userLeave) => userLeave.id)
+  userLeaves: UserLeave[];
 }

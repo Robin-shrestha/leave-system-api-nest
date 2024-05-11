@@ -1,6 +1,7 @@
 import { Country } from 'src/module/country/entities/country.entity';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { Roles } from 'src/module/roles/entity/roles.entity';
+import { UserLeave } from 'src/module/user-leave/entities/user-leave.entity';
 import {
   Column,
   Entity,
@@ -8,6 +9,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 export enum Gender {
@@ -66,4 +68,7 @@ export class Users extends AbstractEntity<Users> {
     name: 'country',
   })
   country: Country;
+
+  @OneToMany(() => UserLeave, (userLeave) => userLeave.id)
+  userLeaves: UserLeave[];
 }

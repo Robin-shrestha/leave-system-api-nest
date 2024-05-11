@@ -12,12 +12,13 @@ import { RolesModule } from './module/roles/roles.module';
 import { CountryModule } from './module/country/country.module';
 import { DatabaseModule } from './module/database/database.module';
 import { HolidaysModule } from './module/holidays/holidays.module';
+import { UserLeaveModule } from './module/user-leave/user-leave.module';
 import { FiscalYearModule } from './module/fiscal-year/fiscal-year.module';
+import { LeaveTypesModule } from './module/leave-types/leave-types.module';
+import { LeavePolicyModule } from './module/leave-policy/leave-policy.module';
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
 import { DefaultExceptionFilter } from './exception-filters/default-exception.filter';
 import { DatabaseExceptionFilter } from './exception-filters/database-excpetion.filter';
-import { LeavePolicyModule } from './module/leave-policy/leave-policy.module';
-import { LeaveTypesModule } from './module/leave-types/leave-types.module';
 
 export const appDataSource = new DataSource({
   type: 'mysql',
@@ -48,6 +49,7 @@ export const appDataSource = new DataSource({
     HolidaysModule,
     LeavePolicyModule,
     LeaveTypesModule,
+    UserLeaveModule,
   ],
   controllers: [],
   providers: [
