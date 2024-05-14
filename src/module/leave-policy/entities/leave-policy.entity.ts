@@ -40,6 +40,6 @@ export class LeavePolicy extends AbstractEntity<LeavePolicy> {
   @Column({ type: 'tinyint' })
   count: number;
 
-  @OneToMany(() => UserLeave, (userLeave) => userLeave.id)
+  @OneToMany(() => UserLeave, (userLeave) => userLeave.leavePolicy)
   userLeaves: UserLeave[];
 }

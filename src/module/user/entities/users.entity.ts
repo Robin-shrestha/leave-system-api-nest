@@ -1,5 +1,6 @@
 import { Country } from 'src/module/country/entities/country.entity';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
+import { LeaveRecord } from 'src/module/leave-record/entities/leave-record.entity';
 import { Roles } from 'src/module/roles/entity/roles.entity';
 import { UserLeave } from 'src/module/user-leave/entities/user-leave.entity';
 import {
@@ -71,4 +72,7 @@ export class Users extends AbstractEntity<Users> {
 
   @OneToMany(() => UserLeave, (userLeave) => userLeave.id)
   userLeaves: UserLeave[];
+
+  @OneToMany(() => LeaveRecord, (leaveRecord) => leaveRecord.user)
+  leaveRecord: LeaveRecord[];
 }

@@ -19,6 +19,7 @@ import { LeavePolicyModule } from './module/leave-policy/leave-policy.module';
 import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
 import { DefaultExceptionFilter } from './exception-filters/default-exception.filter';
 import { DatabaseExceptionFilter } from './exception-filters/database-excpetion.filter';
+import { LeaveRecordModule } from './module/leave-record/leave-record.module';
 
 export const appDataSource = new DataSource({
   type: 'mysql',
@@ -50,6 +51,7 @@ export const appDataSource = new DataSource({
     LeavePolicyModule,
     LeaveTypesModule,
     UserLeaveModule,
+    LeaveRecordModule,
   ],
   controllers: [],
   providers: [
