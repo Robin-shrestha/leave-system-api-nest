@@ -1,7 +1,7 @@
 import { CreateLeaveTypeDto } from 'src/module/leave-types/dto/create-leave-type.dto';
 import { LeaveTypesService } from '../leave-types.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { Gender } from 'src/module/user/entities/users.entity';
+import { Gender } from 'src/types/enums';
 
 const leaveTypes: CreateLeaveTypeDto[] = [
   {

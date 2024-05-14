@@ -1,5 +1,6 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Gender } from 'src/module/user/entities/users.entity';
+
+import { Gender } from 'src/types/enums';
 
 export class CreateLeaveTypeDto {
   @IsString()

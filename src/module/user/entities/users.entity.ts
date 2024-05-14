@@ -3,6 +3,7 @@ import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { LeaveRecord } from 'src/module/leave-record/entities/leave-record.entity';
 import { Roles } from 'src/module/roles/entity/roles.entity';
 import { UserLeave } from 'src/module/user-leave/entities/user-leave.entity';
+import { Gender } from 'src/types/enums';
 import {
   Column,
   Entity,
@@ -12,12 +13,6 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-
-export enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-  OTHERS = 'others',
-}
 
 @Entity()
 export class Users extends AbstractEntity<Users> {

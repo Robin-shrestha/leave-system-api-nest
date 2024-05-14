@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
+import { Gender } from 'src/types/enums';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { LeavePolicy } from 'src/module/leave-policy/entities/leave-policy.entity';
-import { Gender } from 'src/module/user/entities/users.entity';
 
 @Entity()
 export class LeaveType extends AbstractEntity<LeaveType> {
@@ -12,7 +12,11 @@ export class LeaveType extends AbstractEntity<LeaveType> {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ nullable: true, type: 'enum', enumName: 'Gender' })
+  @Column({
+    nullable: true,
+    type: 'enum',
+    enum: Gender,
+  })
   affectedGender?: Gender;
 
   @OneToMany(() => LeavePolicy, (leavePolicy) => leavePolicy.leaveType)

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserService } from '../user.service';
-import { Gender } from '../entities/users.entity';
+import { Gender } from 'src/types/enums';
 
 const defaultUsers: CreateUserDto[] = [
   {

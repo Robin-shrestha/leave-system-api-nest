@@ -9,8 +9,8 @@ import {
   IsEnum,
 } from 'class-validator';
 import { validationErrors } from 'src/constants/validationMessages';
+import { Gender } from 'src/types/enums';
 import { interpolate } from 'src/utils';
-import { Gender } from '../entities/users.entity';
 
 export class CreateUserDto {
   @IsNotEmpty()
