@@ -2,7 +2,6 @@ import { DataSource } from 'typeorm';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { APP_FILTER } from '@nestjs/core';
 import { AppService } from './app.service';
 import { UserModule } from './module/user/user.module';
 // import { PostModule } from './module/post/post.module';
@@ -17,9 +16,6 @@ import { UserLeaveModule } from './module/user-leave/user-leave.module';
 import { FiscalYearModule } from './module/fiscal-year/fiscal-year.module';
 import { LeaveTypesModule } from './module/leave-types/leave-types.module';
 import { LeavePolicyModule } from './module/leave-policy/leave-policy.module';
-import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
-import { DefaultExceptionFilter } from './exception-filters/default-exception.filter';
-import { DatabaseExceptionFilter } from './exception-filters/database-excpetion.filter';
 import { LeaveRecordModule } from './module/leave-record/leave-record.module';
 
 export const appDataSource = new DataSource({
@@ -56,22 +52,7 @@ export const appDataSource = new DataSource({
     LeaveRecordModule,
   ],
   controllers: [],
-  providers: [
-    AppService,
-    // ? default exception filter goes first
-    {
-      provide: APP_FILTER,
-      useClass: DefaultExceptionFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: DatabaseExceptionFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
 

@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  UseInterceptors,
 } from '@nestjs/common';
 
 import { PostService } from './post.service';
@@ -15,10 +14,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { Role, Roles } from '../auth/decorators/Roles.decorator';
-import { LoggingInterceptorInterceptor } from 'src/interceptors/logginginterceptor/loggingInterceptor.interceptor';
 
 @Controller('post')
-@UseInterceptors(LoggingInterceptorInterceptor)
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
