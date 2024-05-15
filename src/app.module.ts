@@ -8,6 +8,7 @@ import { UserModule } from './module/user/user.module';
 // import { PostModule } from './module/post/post.module';
 
 import { AuthModule } from './module/auth/auth.module';
+import { isEnvValid } from './validators/env.validator';
 import { RolesModule } from './module/roles/roles.module';
 import { CountryModule } from './module/country/country.module';
 import { DatabaseModule } from './module/database/database.module';
@@ -38,6 +39,7 @@ export const appDataSource = new DataSource({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validate: isEnvValid,
     }),
     DatabaseModule,
 

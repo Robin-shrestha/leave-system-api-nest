@@ -9,4 +9,4 @@ services:
     volumes:
       - '~/Projects/gap-projects/db/mysql/:/var/lib/mysql'
     env_file:
-      - .env
+      - .env.docker
