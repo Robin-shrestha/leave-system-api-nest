@@ -1,11 +1,12 @@
 import { Repository } from 'typeorm';
-import { Users } from './entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { Users } from './entities/users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RolesService } from '../roles/roles.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { BaseServiceOptions } from 'src/types/serviceOptions.types';
+import { PaginatedResult, PaginationDto } from 'src/utils';
 import { CountryService } from '../country/country.service';
 
 @Injectable()
@@ -35,12 +36,20 @@ export class UserService {
     return this.userRepository.save(userEntity);
   }
 
-  findAll(options?: BaseServiceOptions) {
-    return this.userRepository.find({
-      withDeleted: options?.showDeleted,
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, page = 1 } = paginationDto;
+    const [res, total] = await this.userRepository.findAndCount({
       relations: {
         country: true,
       },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return new PaginatedResult(res, {
+      page,
+      total,
+      limit,
     });
   }
 
@@ -72,11 +81,6 @@ export class UserService {
 
   async remove(id: number) {
     const userToBeDeleted = await this.findOne(id);
-    console.log(
-      '🚀 ~ UserService ~ remove ~ userToBeDeleted:',
-      userToBeDeleted,
-    );
-    const res = await this.userRepository.softRemove(userToBeDeleted);
-    console.log('🚀 ~ UserService ~ remove ~ res:', res);
+    await this.userRepository.softRemove(userToBeDeleted);
   }
 }
