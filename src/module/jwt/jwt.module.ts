@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule as NestJwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '../config/config.module';
 import { ConfigService } from '../config/config.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: (configService: ConfigService) => {
-        return configService.getDatabaseConfig();
-      },
+    NestJwtModule.registerAsync({
       imports: [ConfigModule],
+      global: true,
+      useFactory: async (configService: ConfigService) => {
+        return configService.getJwtConfig();
+      },
       inject: [ConfigService],
     }),
   ],
 })
-export class DatabaseModule {}
+export class JwtModule {}

@@ -1,14 +1,14 @@
 import { DataSource } from 'typeorm';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 
 import { AppService } from './app.service';
 import { UserModule } from './module/user/user.module';
 // import { PostModule } from './module/post/post.module';
 
+import { JwtModule } from './module/jwt/jwt.module';
 import { AuthModule } from './module/auth/auth.module';
-import { isEnvValid } from './validators/env.validator';
 import { RolesModule } from './module/roles/roles.module';
+import { ConfigModule } from './module/config/config.module';
 import { CountryModule } from './module/country/country.module';
 import { DatabaseModule } from './module/database/database.module';
 import { HolidaysModule } from './module/holidays/holidays.module';
@@ -33,10 +33,8 @@ export const appDataSource = new DataSource({
 });
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      validate: isEnvValid,
-    }),
+    JwtModule,
+    ConfigModule,
     DatabaseModule,
 
     AuthModule,
