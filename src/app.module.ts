@@ -7,7 +7,6 @@ import { UserModule } from './module/user/user.module';
 
 import { JwtModule } from './module/jwt/jwt.module';
 import { AuthModule } from './module/auth/auth.module';
-import { RolesModule } from './module/roles/roles.module';
 import { ConfigModule } from './module/config/config.module';
 import { CountryModule } from './module/country/country.module';
 import { DatabaseModule } from './module/database/database.module';
@@ -39,8 +38,6 @@ export const appDataSource = new DataSource({
 
     AuthModule,
     UserModule,
-    // PostModule,
-    RolesModule,
     CountryModule,
     FiscalYearModule,
     HolidaysModule,
@@ -48,6 +45,8 @@ export const appDataSource = new DataSource({
     LeaveTypesModule,
     UserLeaveModule,
     LeaveRecordModule,
+
+    // PostModule, // ?TEST MODULE
   ],
   controllers: [],
   providers: [AppService],

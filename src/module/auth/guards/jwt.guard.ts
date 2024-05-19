@@ -44,6 +44,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
+    // if certain resource does not have roles attach to it it is assume that it is available to all but requires authentication
+    if (!requiredRoles) {
+      return true;
+    }
+
     const req = context.switchToHttp().getRequest<{
       user: JWTUser;
       [x: string]: unknown;
@@ -55,7 +60,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('user Not Authorized');
     }
 
-    console.log({ userRole, requiredRoles });
     for (const role of requiredRoles) {
       const result = this.accessControlService.isAuthorized({
         requiredRole: role,

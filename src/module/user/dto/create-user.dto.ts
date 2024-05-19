@@ -4,14 +4,13 @@ import {
   Length,
   IsNotEmpty,
   IsOptional,
-  IsArray,
   IsDateString,
-  ArrayNotEmpty,
   IsEnum,
 } from 'class-validator';
-import { validationErrors } from 'src/constants/validationMessages';
-import { Gender } from 'src/types/enums';
+
 import { interpolate } from 'src/utils';
+import { Gender, Role } from 'src/types/enums';
+import { validationErrors } from 'src/constants/validationMessages';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -29,9 +28,8 @@ export class CreateUserDto {
   country: string;
 
   @ApiProperty({ default: [1, 2, 3] })
-  @IsArray()
-  @ArrayNotEmpty()
-  roleIds: number[];
+  @IsEnum(Role)
+  role: Role;
 
   @ApiProperty({ default: '1992-10-10' })
   @IsDateString(

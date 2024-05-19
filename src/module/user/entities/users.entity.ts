@@ -1,19 +1,12 @@
-import { AuthProvider, Gender } from 'src/types/enums';
 import { ApiProperty } from '@nestjs/swagger';
-import { Roles } from 'src/module/roles/entity/roles.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+
+import { AuthProvider, Gender, Role } from 'src/types/enums';
 import { Country } from 'src/module/country/entities/country.entity';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { UserLeave } from 'src/module/user-leave/entities/user-leave.entity';
 import { LeaveRecord } from 'src/module/leave-record/entities/leave-record.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+
 @Entity()
 export class Users extends AbstractEntity<Users> {
   @ApiProperty()
@@ -37,13 +30,7 @@ export class Users extends AbstractEntity<Users> {
   email: string;
 
   @ApiProperty()
-  @ManyToMany(() => Roles, (role) => role.id, { cascade: true })
-  @JoinTable({
-    name: 'user_roles',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
-  })
-  roles: Roles[];
+  role: Role;
 
   @ApiProperty()
   @ManyToOne(() => Country, (country) => country.countryCode, {

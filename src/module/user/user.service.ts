@@ -5,7 +5,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Users } from './entities/users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { RolesService } from '../roles/roles.service';
 import { PaginatedResult, PaginationDto } from 'src/utils';
 import { CountryService } from '../country/country.service';
 
@@ -14,22 +13,16 @@ export class UserService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
-    private readonly rolesServices: RolesService,
     private readonly countryServices: CountryService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { roleIds, country = 'NP', ...rest } = createUserDto;
+    const { country, ...rest } = createUserDto;
 
     const countryEntity = await this.countryServices.findByCountryCode(country);
 
-    const rolesEntity = await Promise.all(
-      roleIds.map((roleId) => this.rolesServices.findOne(roleId)),
-    );
-
     const userEntity = this.userRepository.create({
       ...rest,
-      roles: rolesEntity,
       country: countryEntity,
     });
 
@@ -58,10 +51,6 @@ export class UserService {
       where: { id },
       relations: {
         country: true,
-        roles: true,
-      },
-      select: {
-        roles: { role: true, id: true },
       },
     });
   }

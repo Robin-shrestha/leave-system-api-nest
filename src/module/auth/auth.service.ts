@@ -6,20 +6,17 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from '../user/entities/users.entity';
-import { RolesService } from '../roles/roles.service';
 import { CountryService } from '../country/country.service';
 import { GoogleProfile, JWTUser } from './types/profile.type';
 
 const ACCESS_TOKEN_EXPIRY_TIME = '15m';
 
-const DEFAULT_ROLE = 'User';
 const DEFAULT_COUNTRY = 'NP';
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
     private userService: UserService,
-    private roleService: RolesService,
     private countryService: CountryService,
     private jwtService: JwtService,
   ) {}
@@ -37,7 +34,7 @@ export class AuthService {
 
     const existingUser = await this.userRepository.findOne({
       where: { email: user.email },
-      relations: { roles: true, country: true },
+      relations: { country: true },
     });
 
     if (!existingUser) {
@@ -48,11 +45,11 @@ export class AuthService {
       id: existingUser.id,
       username: existingUser.username,
       email: existingUser.email,
-      role: Role.USER,
       designation: existingUser.designation,
       gender: existingUser.gender,
       country: existingUser.country.countryName,
       dateOfBirth: existingUser.dateOfBirth,
+      role: existingUser.role,
     };
     return {
       access_token: this.generateJwt(payload),
@@ -60,28 +57,24 @@ export class AuthService {
   }
 
   async googleRegisterUser(user: GoogleProfile) {
-    // TODO replace role with eum
-    const UserRole =
-      await this.roleService.findRoleEntityByRoleName(DEFAULT_ROLE);
-
     const UserCountry =
       await this.countryService.findByCountryCode(DEFAULT_COUNTRY);
     const userEntity = this.userRepository.create({
       ...user,
-      roles: [UserRole],
+      role: Role.USER,
       country: UserCountry,
     });
 
     const res = await this.userRepository.save(userEntity);
 
     const jwtPayload: JWTUser = {
-      country: res.country.countryName,
-      designation: res.designation,
-      email: res.email,
-      username: res.username,
-      gender: res.gender,
       id: res.id,
-      role: Role.USER,
+      role: res.role,
+      email: res.email,
+      gender: res.gender,
+      username: res.username,
+      designation: res.designation,
+      country: res.country.countryName,
     };
 
     return {

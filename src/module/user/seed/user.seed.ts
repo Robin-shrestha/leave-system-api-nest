@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserService } from '../user.service';
-import { Gender } from 'src/types/enums';
+import { Gender, Role } from 'src/types/enums';
 
 const defaultUsers: CreateUserDto[] = [
   {
@@ -9,7 +9,7 @@ const defaultUsers: CreateUserDto[] = [
     phone: '(511) 510-0573',
     email: 'ridiculus.ridiculus@outlook.ca',
     address: 'Ap #587-5403 Faucibus Av.',
-    roleIds: [1, 2],
+    role: Role.ADMIN,
     designation: 'Software Engineer',
     country: 'US',
     dateOfBirth: '2000-10-10',
@@ -20,7 +20,7 @@ const defaultUsers: CreateUserDto[] = [
     phone: '(336) 608-7893',
     email: 'montes.nascetur@hotmail.edu',
     address: 'Ap #812-9878 Convallis Av.',
-    roleIds: [1, 3],
+    role: Role.MANAGER,
     designation: 'Software Engineer',
     country: 'NP',
     dateOfBirth: '2000-10-11',
@@ -31,7 +31,7 @@ const defaultUsers: CreateUserDto[] = [
     phone: '1-765-672-0995',
     email: 'elit@icloud.ca',
     address: 'Ap #300-9086 Imperdiet Avenue',
-    roleIds: [1],
+    role: Role.USER,
     designation: 'Software Engineer',
     country: 'NP',
     dateOfBirth: '2000-02-10',
@@ -42,7 +42,7 @@ const defaultUsers: CreateUserDto[] = [
     phone: '(157) 746-6487',
     email: 'convallis@hotmail.couk',
     address: 'Ap #884-4114 Egestas St.',
-    roleIds: [1],
+    role: Role.USER,
     designation: 'Software Engineer',
     country: 'NP',
     dateOfBirth: '2000-10-21',
@@ -53,7 +53,7 @@ const defaultUsers: CreateUserDto[] = [
     phone: '1-733-827-3324',
     email: 'faucibus.leo.in@hotmail.org',
     address: '908-9050 At St.',
-    roleIds: [1],
+    role: Role.USER,
     designation: 'Software Engineer',
     country: 'NP',
     dateOfBirth: '1998-10-16',

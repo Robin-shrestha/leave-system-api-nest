@@ -6,7 +6,6 @@ import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { AuthController } from './auth.controller';
-import { RolesModule } from '../roles/roles.module';
 import { Users } from '../user/entities/users.entity';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { ConfigModule } from '../config/config.module';
@@ -17,7 +16,6 @@ import { AccessControlService } from './accessControl.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Users]),
-    RolesModule,
     UserModule,
     ConfigModule,
     CountryModule,
