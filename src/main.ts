@@ -1,17 +1,21 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-import { TransformResponseInterceptor } from './interceptors/transform-response.interceptor';
+
+import { AppModule } from './app.module';
+import { NestFactory } from '@nestjs/core';
 import { initSwagger } from './config/swagger';
+import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
 import { DefaultExceptionFilter } from './exception-filters/default-exception.filter';
 import { DatabaseExceptionFilter } from './exception-filters/database-excpetion.filter';
-import { HttpExceptionFilter } from './exception-filters/http-exception.filter';
+import { TransformResponseInterceptor } from './interceptors/transform-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   app.setGlobalPrefix('api');
+
+  app.use(cookieParser());
 
   const PORT = configService.get<number>('PORT');
 

@@ -2,7 +2,6 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LeavePolicy } from './entities/leave-policy.entity';
-import { BaseServiceOptions } from 'src/types/serviceOptions.types';
 import { CreateLeavePolicyDto } from './dto/create-leave-policy.dto';
 import { UpdateLeavePolicyDto } from './dto/update-leave-policy.dto';
 import { FiscalYearService } from '../fiscal-year/fiscal-year.service';
@@ -30,9 +29,8 @@ export class LeavePolicyService {
     });
   }
 
-  findAll(options?: BaseServiceOptions) {
+  findAll() {
     return this.leavePolicyRepository.find({
-      withDeleted: !!options?.showDeleted,
       relations: {
         fiscalYear: {
           country: true,

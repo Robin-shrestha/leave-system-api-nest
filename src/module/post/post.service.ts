@@ -101,7 +101,6 @@ export class PostService {
     const post = await this.findOne(id);
 
     const commentEntity = new Comment(comment);
-    console.log('🚀 ~ PostService ~ comment ~ commentEntity:', commentEntity);
     await this.postRepository.save({
       ...post,
       comment: [...post.comment, commentEntity],

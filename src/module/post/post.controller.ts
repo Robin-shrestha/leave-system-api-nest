@@ -9,11 +9,12 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
+import { Role } from 'src/types/enums';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { Role, Roles } from '../auth/decorators/Roles.decorator';
+import { Roles } from '../auth/decorators/Roles.decorator';
 
 @Controller('post')
 export class PostController {

@@ -23,8 +23,17 @@ export class CreateUserDto {
   @ApiProperty({ default: 'rsrestha@gmail.com' })
   email: string;
 
-  @ApiProperty({ default: '1992-10-10' })
+  @ApiProperty({ default: 'NP' })
+  @Length(2, 2)
   @IsNotEmpty()
+  country: string;
+
+  @ApiProperty({ default: [1, 2, 3] })
+  @IsArray()
+  @ArrayNotEmpty()
+  roleIds: number[];
+
+  @ApiProperty({ default: '1992-10-10' })
   @IsDateString(
     {},
     {
@@ -36,15 +45,15 @@ export class CreateUserDto {
   dateOfBirth: string;
 
   @ApiProperty({ default: 'Kathmandu' })
-  @IsNotEmpty()
+  @IsOptional()
   address: string;
 
   @ApiProperty({ default: 'SE' })
-  @IsNotEmpty()
+  @IsOptional()
   designation: string;
 
   @ApiProperty({ default: '9998884445' })
-  @IsNotEmpty()
+  @IsOptional()
   phone: string;
 
   @ApiPropertyOptional({
@@ -54,18 +63,8 @@ export class CreateUserDto {
   @IsOptional()
   profilePicture?: string;
 
-  @ApiProperty({ default: [1, 2, 3] })
-  @IsArray()
-  @ArrayNotEmpty()
-  roleIds: number[];
-
-  @ApiProperty({ default: 'NP' })
-  @Length(2, 2)
-  @IsNotEmpty()
-  country: string;
-
   @ApiProperty({ default: Gender.MALE })
   @IsEnum(Gender)
-  @IsNotEmpty()
+  @IsOptional()
   gender: Gender;
 }

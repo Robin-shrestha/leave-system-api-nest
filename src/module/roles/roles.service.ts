@@ -3,7 +3,6 @@ import { CreateRolesDto } from './dto/roles.dto';
 import { Roles } from './entity/roles.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
-import { BaseServiceOptions } from 'src/types/serviceOptions.types';
 
 @Injectable()
 export class RolesService {
@@ -14,10 +13,8 @@ export class RolesService {
     private rolesRepository: Repository<Roles>,
   ) {}
 
-  findAll(options?: BaseServiceOptions) {
-    return this.rolesRepository.find({
-      withDeleted: options?.showDeleted,
-    });
+  findAll() {
+    return this.rolesRepository.find({});
   }
 
   findOne(id: number) {

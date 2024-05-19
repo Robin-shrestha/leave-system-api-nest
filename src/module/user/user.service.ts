@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { roleIds, country, ...rest } = createUserDto;
+    const { roleIds, country = 'NP', ...rest } = createUserDto;
 
     const countryEntity = await this.countryServices.findByCountryCode(country);
 

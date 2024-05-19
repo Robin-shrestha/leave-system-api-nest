@@ -27,9 +27,7 @@ export class LeavePolicySeed {
   ) {}
 
   async seedLeavePolicy() {
-    const existingLeavePolicies = await this.leavePolicyService.findAll({
-      showDeleted: true,
-    });
+    const existingLeavePolicies = await this.leavePolicyService.findAll();
 
     if (!existingLeavePolicies.length) {
       const fiscalYear = (await this.fiscalYearService.findAll())[0];

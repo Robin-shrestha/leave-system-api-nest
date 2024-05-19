@@ -1,39 +1,37 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { APP_GUARD } from '@nestjs/core';
 import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
+import { JwtAuthGuard } from './guards/jwt.guard';
 import { AuthController } from './auth.controller';
-import { AuthGuard } from './guards/auth.guard';
-import { RolesGuard } from './guards/roles.guard';
+import { RolesModule } from '../roles/roles.module';
+import { Users } from '../user/entities/users.entity';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { ConfigModule } from '../config/config.module';
+import { CountryModule } from '../country/country.module';
+import { GoogleStrategy } from './strategy/google.strategy';
+import { AccessControlService } from './accessControl.service';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Users]),
+    RolesModule,
     UserModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        return {
-          secret: configService.getOrThrow<string>('JWT_SECRET_KEY'),
-          global: true,
-        };
-      },
-      inject: [ConfigService],
-    }),
+    ConfigModule,
+    CountryModule,
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
-    // ? Note: The ordering of these two guards matter. Need to authenticate first
+    GoogleStrategy,
+    JwtStrategy,
+    AccessControlService,
+
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
+      useClass: JwtAuthGuard,
     },
   ],
   exports: [AuthService],
