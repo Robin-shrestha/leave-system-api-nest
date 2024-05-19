@@ -68,7 +68,7 @@ export class UserSeed {
   constructor(private readonly userServices: UserService) {}
 
   async seedUsers() {
-    const users = await this.userServices.findAll({});
+    const users = await this.userServices.findAll();
     if (!users.data.length) {
       await Promise.all(
         defaultUsers.map((user) => this.userServices.create(user)),

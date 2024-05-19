@@ -1,5 +1,4 @@
 import { Repository } from 'typeorm';
-import { Role } from 'src/types/enums';
 import { JWTUser } from '../types/profile.type';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -41,7 +40,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const userPayload: JWTUser = {
       ...user,
       country: user.country.countryName,
-      role: Role.MANAGER, // TODO update ROle
     };
 
     return userPayload;

@@ -41,6 +41,12 @@ export class AuthController {
     return res.status(HttpStatus.OK).redirect(redirectUrl);
   }
 
+  @Public()
+  @Get('refresh')
+  refreshTokens() {
+    throw new Error('NOt yet implemented');
+  }
+
   @Get('profile')
   profile() {
     return 'profile';

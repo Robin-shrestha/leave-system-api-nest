@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsDateString,
   IsEnum,
+  IsNumber,
 } from 'class-validator';
 
 import { interpolate } from 'src/utils';
@@ -45,6 +46,11 @@ export class CreateUserDto {
   @ApiProperty({ default: 'Kathmandu' })
   @IsOptional()
   address: string;
+
+  @ApiProperty({ default: 1 })
+  @IsOptional()
+  @IsNumber()
+  managerId?: number;
 
   @ApiProperty({ default: 'SE' })
   @IsOptional()

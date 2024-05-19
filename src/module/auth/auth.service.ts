@@ -9,7 +9,7 @@ import { Users } from '../user/entities/users.entity';
 import { CountryService } from '../country/country.service';
 import { GoogleProfile, JWTUser } from './types/profile.type';
 
-const ACCESS_TOKEN_EXPIRY_TIME = '15m';
+const ACCESS_TOKEN_EXPIRY_TIME = '2h';
 
 const DEFAULT_COUNTRY = 'NP';
 @Injectable()

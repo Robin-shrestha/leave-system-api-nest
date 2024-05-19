@@ -8,26 +8,43 @@ import {
   Put,
   Patch,
 } from '@nestjs/common';
+import { Role } from 'src/types/enums';
+import { Roles } from '../auth/decorators/Roles.decorator';
 import { LeaveRecordService } from './leave-record.service';
+import { LeaveStatus } from './entities/leave-record.entity';
 import { CreateLeaveRecordDto } from './dto/create-leave-record.dto';
 import { UpdateLeaveRecordDto } from './dto/update-leave-record.dto';
-import { LeaveStatus } from './entities/leave-record.entity';
 
 @Controller('leave-record')
 export class LeaveRecordController {
   constructor(private readonly leaveRecordService: LeaveRecordService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
   create(@Body() createLeaveRecordDto: CreateLeaveRecordDto) {
     return this.leaveRecordService.create(createLeaveRecordDto);
   }
 
   @Get()
+  @Roles(Role.ADMIN) // ? umm if anyone can view anyone elses leaves request then i guess the role can be USER
   findAll() {
     return this.leaveRecordService.findAll();
   }
 
+  @Get('user/:userId')
+  @Roles(Role.USER)
+  findLeavesByUserId(@Param('userId') userId: string) {
+    throw new Error('Not Implemented!');
+  }
+
+  @Get('manager/:managerId')
+  @Roles(Role.MANAGER)
+  findLeavesByManager(@Param('managerId') managerId: string) {
+    throw new Error('Not Implemented!');
+  }
+
   @Get(':id')
+  @Roles(Role.USER)
   findOne(@Param('id') id: string) {
     return this.leaveRecordService.findOne(+id, {
       userLeave: { leavePolicy: true },
@@ -36,17 +53,20 @@ export class LeaveRecordController {
 
   // only by managers or admin
   @Patch(':id/approve')
+  @Roles(Role.MANAGER)
   approveLeave(@Param('id') id: string) {
     return this.leaveRecordService.updateStatus(+id, LeaveStatus.APPROVED);
   }
 
   // only by managers or admin
   @Patch(':id/reject')
+  @Roles(Role.MANAGER)
   rejectLeave(@Param('id') id: string) {
     return this.leaveRecordService.updateStatus(+id, LeaveStatus.REJECTED);
   }
 
   @Put(':id')
+  @Roles(Role.USER)
   update(
     @Param('id') id: string,
     @Body() updateLeaveRecordDto: UpdateLeaveRecordDto,
@@ -55,6 +75,7 @@ export class LeaveRecordController {
   }
 
   @Delete(':id')
+  @Roles(Role.USER)
   remove(@Param('id') id: string) {
     return this.leaveRecordService.remove(+id);
   }

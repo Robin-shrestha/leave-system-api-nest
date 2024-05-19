@@ -30,6 +30,11 @@ export class Users extends AbstractEntity<Users> {
   email: string;
 
   @ApiProperty()
+  @Column({
+    type: 'enum',
+    enum: Role,
+    nullable: false,
+  })
   role: Role;
 
   @ApiProperty()
@@ -74,6 +79,11 @@ export class Users extends AbstractEntity<Users> {
   @ManyToOne(() => Users, (user) => user.id, { cascade: true })
   @JoinColumn({ name: 'created_by' })
   createdBy?: Users;
+
+  @ApiProperty()
+  @ManyToOne(() => Users, (user) => user.id, { cascade: true })
+  @JoinColumn({ name: 'manager' })
+  manager?: Users;
 
   @OneToMany(() => UserLeave, (userLeave) => userLeave.id)
   userLeaves: UserLeave[];

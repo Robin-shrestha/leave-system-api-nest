@@ -26,4 +26,8 @@ export class CountryService {
   findAll() {
     return this.countryRepository.find();
   }
+
+  async delete(countryCode: string) {
+    await this.countryRepository.delete(countryCode);
+  }
 }

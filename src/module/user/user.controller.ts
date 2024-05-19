@@ -26,8 +26,8 @@ import { PaginatedResponse, Response } from 'src/utils/response';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Roles(Role.ADMIN)
   @Post()
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Create a user' })
   @ApiOkResponse({
     status: HttpStatus.CREATED,
@@ -37,8 +37,8 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Roles(Role.USER)
   @Get()
+  @Roles(Role.USER)
   @ApiOperation({ summary: 'Return all Users' })
   @ApiOkResponse({
     status: HttpStatus.ACCEPTED,
@@ -52,6 +52,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @Roles(Role.USER)
   @ApiOperation({ summary: 'Return a User' })
   @ApiOkResponse({
     status: HttpStatus.ACCEPTED,
@@ -62,6 +63,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Roles(Role.USER)
   @ApiOperation({ summary: 'Updates a User' })
   @ApiOkResponse({
     status: HttpStatus.ACCEPTED,
@@ -72,6 +74,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Deletes a User' })
   @ApiOkResponse({
     status: HttpStatus.ACCEPTED,
