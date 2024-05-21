@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFiscalYearDto } from './dto/create-fiscal-year.dto';
-import { CountryService } from '../country/country.service';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FiscalYear } from './entities/fiscal-year.entity';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { Injectable } from '@nestjs/common';
+import { PaginatedResult, PaginationDto } from 'src/utils';
+import { FiscalYear } from './entities/fiscal-year.entity';
+import { CountryService } from '../country/country.service';
+import { CreateFiscalYearDto } from './dto/create-fiscal-year.dto';
 
 @Injectable()
 export class FiscalYearService {
@@ -24,30 +26,18 @@ export class FiscalYearService {
     });
   }
 
-  // test transaction
-  async SaveInBulk(createFiscalYearDto: CreateFiscalYearDto[]) {
-    await this.fiscalYearRepository.manager.transaction(async (manager) => {
-      const entityMap = [];
-      for (let i = 0; i < createFiscalYearDto.length; i++) {
-        const { countryCode, ...rest } = createFiscalYearDto[i];
-
-        const associatedCountry =
-          await this.countryService.findByCountryCode(countryCode);
-
-        entityMap.push(
-          manager.insert(FiscalYear, {
-            ...rest,
-            country: associatedCountry,
-          }),
-        );
-      }
-      await Promise.all(entityMap);
-    });
-  }
-
-  findAll() {
-    return this.fiscalYearRepository.find({
+  async findAll(paginationDto: PaginationDto = {}) {
+    const { limit = 10, page = 1 } = paginationDto;
+    const [res, total] = await this.fiscalYearRepository.findAndCount({
       relations: { country: true, holiday: true },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return new PaginatedResult(res, {
+      page,
+      total,
+      limit,
     });
   }
 

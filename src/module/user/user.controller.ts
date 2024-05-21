@@ -1,4 +1,9 @@
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -21,6 +26,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../auth/decorators/Roles.decorator';
 import { PaginatedResponse, Response } from 'src/utils/response';
 
+@ApiBearerAuth()
 @ApiTags('Users')
 @Controller('user')
 export class UserController {

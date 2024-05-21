@@ -11,7 +11,7 @@ export function initSwagger(app: INestApplication) {
     .setTitle('Employee Leave Manager')
     .setDescription('The Employee Leave Manager description')
     .setVersion('1.0')
-    // .addBearerAuth() // TODO uncomment after ading auth
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

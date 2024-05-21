@@ -31,7 +31,7 @@ export class FiscalYearSeed {
   async seedFiscalYear() {
     const existingCountries = await this.fiscalYearService.findAll();
 
-    if (!existingCountries.length) {
+    if (!existingCountries.data.length) {
       await Promise.all(
         fiscalYear.map((fy) => this.fiscalYearService.create(fy)),
       );

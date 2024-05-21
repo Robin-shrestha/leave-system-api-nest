@@ -10,7 +10,7 @@ import { LeaveRecord } from 'src/module/leave-record/entities/leave-record.entit
 @Entity()
 export class Users extends AbstractEntity<Users> {
   @ApiProperty()
-  @Column({ length: 120, nullable: false })
+  @Column({ length: 120, nullable: false, unique: true })
   username: string;
 
   // TODO

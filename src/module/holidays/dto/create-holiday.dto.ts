@@ -10,5 +10,5 @@ export class CreateHolidayDto {
 
   @IsNumber()
   @IsNotEmpty()
-  fiscalYear: number;
+  fiscalYearId: number;
 }

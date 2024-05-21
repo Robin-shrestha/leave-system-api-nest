@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly configService: ConfigService,
     @InjectRepository(Users) private userRepository: Repository<Users>,
   ) {
-    const extractJwtFromCookie = (req) => {
+    const extractJwtFromCookieOrHeader = (req) => {
       let token = null;
       if (req && req.cookies) {
         token = req.cookies['access_token'];
@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       ignoreExpiration: false,
       secretOrKey: configService.getJwtConfig().secret,
-      jwtFromRequest: extractJwtFromCookie,
+      jwtFromRequest: extractJwtFromCookieOrHeader,
     });
   }
 

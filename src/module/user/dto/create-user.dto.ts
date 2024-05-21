@@ -26,7 +26,7 @@ export class CreateUserDto {
   @ApiProperty({ default: 'NP' })
   @Length(2, 2)
   @IsNotEmpty()
-  country: string;
+  countryCode: string;
 
   @ApiProperty({ default: [1, 2, 3] })
   @IsEnum(Role)

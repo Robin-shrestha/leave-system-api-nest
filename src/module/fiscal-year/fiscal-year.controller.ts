@@ -1,8 +1,11 @@
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+
 import { Role } from 'src/types/enums';
+import { PaginationDto } from 'src/utils';
+import { NonWhiteListedValidation } from 'src/pipes';
 import { FiscalYearService } from './fiscal-year.service';
 import { Roles } from '../auth/decorators/Roles.decorator';
 import { CreateFiscalYearDto } from './dto/create-fiscal-year.dto';
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 
 @Controller('fiscal-year')
 export class FiscalYearController {
@@ -16,8 +19,11 @@ export class FiscalYearController {
 
   @Get()
   @Roles(Role.ADMIN)
-  findAll() {
-    return this.fiscalYearService.findAll();
+  findAll(
+    @Query(NonWhiteListedValidation)
+    paginationDto?: PaginationDto,
+  ) {
+    return this.fiscalYearService.findAll(paginationDto);
   }
 
   @Get(':id')

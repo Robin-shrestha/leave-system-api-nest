@@ -13,7 +13,7 @@ import { Roles } from '../auth/decorators/Roles.decorator';
 import { CreateHolidayDto } from './dto/create-holiday.dto';
 import { UpdateHolidayDto } from './dto/update-holiday.dto';
 
-@Controller('holidays')
+@Controller('holiday')
 export class HolidaysController {
   constructor(private readonly holidaysService: HolidaysService) {}
 

@@ -1,12 +1,13 @@
 import { DataSource } from 'typeorm';
 import { Module } from '@nestjs/common';
 
-import { AppService } from './app.service';
 import { UserModule } from './module/user/user.module';
 // import { PostModule } from './module/post/post.module';
 
+import { AppService } from './app.service';
 import { JwtModule } from './module/jwt/jwt.module';
 import { AuthModule } from './module/auth/auth.module';
+import { SeedModule } from './module/seed/seed.module';
 import { ConfigModule } from './module/config/config.module';
 import { CountryModule } from './module/country/country.module';
 import { DatabaseModule } from './module/database/database.module';
@@ -45,6 +46,7 @@ export const appDataSource = new DataSource({
     LeaveTypesModule,
     UserLeaveModule,
     LeaveRecordModule,
+    SeedModule,
 
     // PostModule, // ?TEST MODULE
   ],
@@ -52,10 +54,3 @@ export const appDataSource = new DataSource({
   providers: [AppService],
 })
 export class AppModule {}
-
-/**
- * Typeorm migraion commands
- *
- * ? create migration file
- * > typeorm migration:create ./path-to-migrations-dir/PostRefactoring
- */

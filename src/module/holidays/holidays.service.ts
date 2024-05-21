@@ -14,9 +14,9 @@ export class HolidaysService {
   ) {}
 
   async create(createHolidayDto: CreateHolidayDto) {
-    const { fiscalYear, ...rest } = createHolidayDto;
+    const { fiscalYearId, ...rest } = createHolidayDto;
 
-    const fiscalYearEntity = await this.fiscalYearService.findOne(fiscalYear);
+    const fiscalYearEntity = await this.fiscalYearService.findOne(fiscalYearId);
 
     await this.holidayRepository.insert({
       ...rest,
@@ -47,11 +47,11 @@ export class HolidaysService {
       where: { id },
       relations: { fiscalYear: true },
     });
-    const { fiscalYear, ...rest } = updateHolidayDto;
+    const { fiscalYearId, ...rest } = updateHolidayDto;
 
-    if (fiscalYear !== holidayEntity.fiscalYear.id) {
+    if (fiscalYearId !== holidayEntity.fiscalYear.id) {
       holidayEntity.fiscalYear =
-        await this.fiscalYearService.findOne(fiscalYear);
+        await this.fiscalYearService.findOne(fiscalYearId);
     }
 
     return this.holidayRepository.save({

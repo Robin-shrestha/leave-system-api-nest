@@ -24,9 +24,10 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { country, managerId, ...rest } = createUserDto;
+    const { countryCode, managerId, ...rest } = createUserDto;
 
-    const countryEntity = await this.countryServices.findByCountryCode(country);
+    const countryEntity =
+      await this.countryServices.findByCountryCode(countryCode);
 
     const userEntity = this.userRepository.create({
       ...rest,

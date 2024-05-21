@@ -3,7 +3,7 @@ import { HolidaysService } from '../holidays.service';
 import { CreateHolidayDto } from '../dto/create-holiday.dto';
 import { FiscalYearService } from 'src/module/fiscal-year/fiscal-year.service';
 
-const holidays: Omit<CreateHolidayDto, 'fiscalYear'>[] = [
+const holidays: Omit<CreateHolidayDto, 'fiscalYearId'>[] = [
   {
     date: '2024-08-05',
     name: 'Holiday 1',
@@ -36,7 +36,7 @@ export class HolidaysSeed {
         holidays.map((holiday) =>
           this.holidayService.create({
             ...holiday,
-            fiscalYear: seedFiscalYear.id,
+            fiscalYearId: seedFiscalYear.id,
           }),
         ),
       );
