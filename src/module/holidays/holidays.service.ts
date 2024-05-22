@@ -13,6 +13,7 @@ export class HolidaysService {
     @InjectRepository(Holidays) private holidayRepository: Repository<Holidays>,
   ) {}
 
+  // TODO validate that the date lies between the start and end date of the referenced fiscal year
   async create(createHolidayDto: CreateHolidayDto) {
     const { fiscalYearId, ...rest } = createHolidayDto;
 
@@ -42,6 +43,7 @@ export class HolidaysService {
     });
   }
 
+  // TODO validate that the date lies between the start and end date of the referenced fiscal year
   async update(id: number, updateHolidayDto: UpdateHolidayDto) {
     const holidayEntity = await this.holidayRepository.findOneOrFail({
       where: { id },

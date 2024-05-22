@@ -1,4 +1,4 @@
-import { OmitType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/swagger';
 import { CreateLeaveRecordDto } from './create-leave-record.dto';
 import { IsNumber, IsOptional } from 'class-validator';
 
@@ -8,8 +8,8 @@ export class UpdateLeaveRecordDto extends OmitType(CreateLeaveRecordDto, [
 ]) {
   @IsOptional()
   @IsNumber()
-  userLeavePolicyId: number;
+  userLeavePolicyId?: number;
 
   @IsOptional()
-  description: string;
+  description?: string;
 }

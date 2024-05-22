@@ -14,7 +14,10 @@ import { LeaveRecordService } from './leave-record.service';
 import { LeaveStatus } from './entities/leave-record.entity';
 import { CreateLeaveRecordDto } from './dto/create-leave-record.dto';
 import { UpdateLeaveRecordDto } from './dto/update-leave-record.dto';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Leave Record')
 @Controller('leave-record')
 export class LeaveRecordController {
   constructor(private readonly leaveRecordService: LeaveRecordService) {}
@@ -33,12 +36,16 @@ export class LeaveRecordController {
 
   @Get('user/:userId')
   @Roles(Role.USER)
+  @ApiOperation({ summary: 'Get all leaves of a user' })
   findLeavesByUserId(@Param('userId') userId: string) {
     throw new Error('Not Implemented!');
   }
 
   @Get('manager/:managerId')
   @Roles(Role.MANAGER)
+  @ApiOperation({
+    summary: 'Get all leave records managed by a specific manager',
+  })
   findLeavesByManager(@Param('managerId') managerId: string) {
     throw new Error('Not Implemented!');
   }
@@ -54,6 +61,7 @@ export class LeaveRecordController {
   // only by managers or admin
   @Patch(':id/approve')
   @Roles(Role.MANAGER)
+  @ApiOperation({ summary: 'Approve Leave' })
   approveLeave(@Param('id') id: string) {
     return this.leaveRecordService.updateStatus(+id, LeaveStatus.APPROVED);
   }
@@ -61,6 +69,7 @@ export class LeaveRecordController {
   // only by managers or admin
   @Patch(':id/reject')
   @Roles(Role.MANAGER)
+  @ApiOperation({ summary: 'Reject Leave' })
   rejectLeave(@Param('id') id: string) {
     return this.leaveRecordService.updateStatus(+id, LeaveStatus.REJECTED);
   }

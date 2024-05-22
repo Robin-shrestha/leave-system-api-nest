@@ -5,10 +5,10 @@ export class Response<T> {
   @ApiProperty({ default: 'response object' })
   data: T;
 
-  @ApiProperty()
+  @ApiProperty({ default: 'SUCCESS' })
   message: string;
 
-  @ApiProperty()
+  @ApiProperty({ default: 200 })
   statusCode: number;
 
   constructor(data: T, statusCode: number, message?: string) {

@@ -1,3 +1,10 @@
+import { Request, Response } from 'express';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -6,22 +13,26 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+
+import { Response as Resp } from 'src/utils';
 import { AuthService } from './auth.service';
 import { Public } from './decorators/Public.decorator';
 import { GoogleAuthGuard } from './guards/googleAuth.guard';
-import { Response } from 'express';
-import { GoogleProfile } from './types/profile.type';
+import { GoogleProfile, JWTUser } from './types/profile.type';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
+  @ApiOperation({ summary: 'Sign In with google' })
   @Get('google/login')
   @UseGuards(GoogleAuthGuard)
   async googleLogin() {}
 
   @Public()
+  @ApiOperation({ summary: 'Callback route for google auth' })
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
   async googleAuthCallback(@Req() req, @Res() res: Response) {
@@ -43,12 +54,19 @@ export class AuthController {
 
   @Public()
   @Get('refresh')
+  @ApiOperation({ summary: 'Get new Access Tokens once expired' })
   refreshTokens() {
     throw new Error('NOt yet implemented');
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Returns the user Profile' })
+  @ApiOkResponse({
+    status: HttpStatus.OK,
+    type: Resp<JWTUser>,
+  })
   @Get('profile')
-  profile() {
-    return 'profile';
+  profile(@Req() req: Request) {
+    return req.user;
   }
 }

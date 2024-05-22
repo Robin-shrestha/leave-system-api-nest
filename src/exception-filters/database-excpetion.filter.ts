@@ -6,7 +6,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import { TypeORMError } from 'typeorm';
+import { TypeORMError, EntityNotFoundError } from 'typeorm';
 import { ResponseError } from 'src/types/error.type';
 
 @Catch(TypeORMError)
@@ -26,6 +26,10 @@ export class DatabaseExceptionFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
     };
+
+    if (exception instanceof EntityNotFoundError) {
+      errorPayload.message = 'Record Not Found';
+    }
 
     response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(errorPayload);
   }

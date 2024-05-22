@@ -7,12 +7,16 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
 import { Role } from 'src/types/enums';
 import { LeaveTypesService } from './leave-types.service';
 import { Roles } from '../auth/decorators/Roles.decorator';
 import { CreateLeaveTypeDto } from './dto/create-leave-type.dto';
 import { UpdateLeaveTypeDto } from './dto/update-leave-type.dto';
 
+@ApiBearerAuth()
+@ApiTags('Leave Types')
 @Controller('leave-type')
 export class LeaveTypesController {
   constructor(private readonly leaveTypesService: LeaveTypesService) {}

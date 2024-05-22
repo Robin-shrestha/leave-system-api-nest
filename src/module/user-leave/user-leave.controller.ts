@@ -13,7 +13,10 @@ import { UserLeaveService } from './user-leave.service';
 import { Roles } from '../auth/decorators/Roles.decorator';
 import { CreateUserLeaveDto } from './dto/create-user-leave.dto';
 import { UpdateUserLeaveDto } from './dto/update-user-leave.dto';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('User Leave')
 @Controller('user-leave')
 export class UserLeaveController {
   constructor(private readonly userLeaveService: UserLeaveService) {}
@@ -26,29 +29,23 @@ export class UserLeaveController {
 
   @Get()
   @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Get all User leave Policies' })
   findAll() {
     return this.userLeaveService.findAll();
   }
 
-  @Get('user/:userId')
-  @Roles(Role.USER)
-  findAllUserLeavePolicyByUser(@Param('userId', ParseIntPipe) userId: string) {
-    throw new Error('Not implemented');
-  }
-
-  @Get('user/:userId/:id')
-  @Roles(Role.USER)
-  findOneUserLeavePolicyByUser(
-    @Param('userId', ParseIntPipe) userId: string,
-    @Param('id', ParseIntPipe) id: string,
-  ) {
-    throw new Error('Not implemented');
-  }
-
   @Get(':id')
   @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Get User leave Policies by user leave policy id' })
   findOne(@Param('id') id: string) {
     return this.userLeaveService.findOne(+id);
+  }
+
+  @Get('user/:userId')
+  @Roles(Role.USER)
+  @ApiOperation({ summary: 'Get User leave Policies of a specific user' })
+  findAllUserLeavePolicyByUser(@Param('userId', ParseIntPipe) userId: string) {
+    throw new Error('Not implemented');
   }
 
   @Patch(':id')
