@@ -68,6 +68,13 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
+  @Get('manager/:managerId')
+  @Roles(Role.MANAGER)
+  @ApiOperation({ summary: 'Return all Users of a manager' })
+  findUsersOfaManager(@Param('managerId') managerId: string) {
+    return this.userService.findByManager(+managerId);
+  }
+
   @Patch(':id')
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Updates a User' })

@@ -7,14 +7,18 @@ import {
   Delete,
   Put,
   Patch,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { Role } from 'src/types/enums';
+import { JWTUser } from '../auth/types/profile.type';
 import { Roles } from '../auth/decorators/Roles.decorator';
 import { LeaveRecordService } from './leave-record.service';
-import { LeaveStatus } from './entities/leave-record.entity';
 import { CreateLeaveRecordDto } from './dto/create-leave-record.dto';
 import { UpdateLeaveRecordDto } from './dto/update-leave-record.dto';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { RejectLeaveRecordDto } from './dto/reject-leave-record.dto';
 
 @ApiBearerAuth()
 @ApiTags('Leave Record')
@@ -24,8 +28,14 @@ export class LeaveRecordController {
 
   @Post()
   @Roles(Role.ADMIN)
-  create(@Body() createLeaveRecordDto: CreateLeaveRecordDto) {
-    return this.leaveRecordService.create(createLeaveRecordDto);
+  create(
+    @Body() createLeaveRecordDto: CreateLeaveRecordDto,
+    @Req() req: Request,
+  ) {
+    return this.leaveRecordService.create(
+      createLeaveRecordDto,
+      req.user as JWTUser,
+    );
   }
 
   @Get()
@@ -37,8 +47,8 @@ export class LeaveRecordController {
   @Get('user/:userId')
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Get all leaves of a user' })
-  findLeavesByUserId(@Param('userId') userId: string) {
-    throw new Error('Not Implemented!');
+  findLeavesByUserId(@Param('userId') userId: number) {
+    return this.leaveRecordService.findAllLeaveRecordOfUser(+userId);
   }
 
   @Get('manager/:managerId')
@@ -47,7 +57,7 @@ export class LeaveRecordController {
     summary: 'Get all leave records managed by a specific manager',
   })
   findLeavesByManager(@Param('managerId') managerId: string) {
-    throw new Error('Not Implemented!');
+    return this.leaveRecordService.findLeaveRecordsByManager(+managerId);
   }
 
   @Get(':id')
@@ -55,6 +65,7 @@ export class LeaveRecordController {
   findOne(@Param('id') id: string) {
     return this.leaveRecordService.findOne(+id, {
       userLeave: { leavePolicy: true },
+      user: true,
     });
   }
 
@@ -62,16 +73,24 @@ export class LeaveRecordController {
   @Patch(':id/approve')
   @Roles(Role.MANAGER)
   @ApiOperation({ summary: 'Approve Leave' })
-  approveLeave(@Param('id') id: string) {
-    return this.leaveRecordService.updateStatus(+id, LeaveStatus.APPROVED);
+  approveLeave(@Param('id') id: string, @Req() req: Request) {
+    return this.leaveRecordService.approveLeave(+id, req.user as JWTUser);
   }
 
   // only by managers or admin
   @Patch(':id/reject')
   @Roles(Role.MANAGER)
   @ApiOperation({ summary: 'Reject Leave' })
-  rejectLeave(@Param('id') id: string) {
-    return this.leaveRecordService.updateStatus(+id, LeaveStatus.REJECTED);
+  rejectLeave(
+    @Param('id') id: string,
+    @Body() rejectBody: RejectLeaveRecordDto,
+    @Req() req: Request,
+  ) {
+    return this.leaveRecordService.rejectLeave(
+      +id,
+      rejectBody,
+      req.user as JWTUser,
+    );
   }
 
   @Put(':id')
@@ -79,8 +98,13 @@ export class LeaveRecordController {
   update(
     @Param('id') id: string,
     @Body() updateLeaveRecordDto: UpdateLeaveRecordDto,
+    @Req() req: Request,
   ) {
-    return this.leaveRecordService.update(+id, updateLeaveRecordDto);
+    return this.leaveRecordService.update(
+      +id,
+      updateLeaveRecordDto,
+      req.user as JWTUser,
+    );
   }
 
   @Delete(':id')

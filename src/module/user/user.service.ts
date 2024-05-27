@@ -59,8 +59,10 @@ export class UserService {
   async findAll(paginationDto: PaginationDto = {}) {
     const { limit = 10, page = 1 } = paginationDto;
     const [res, total] = await this.userRepository.findAndCount({
+      select: { manager: { id: true, username: true, email: true } },
       relations: {
         country: true,
+        manager: true,
       },
       skip: (page - 1) * limit,
       take: limit,
@@ -73,6 +75,11 @@ export class UserService {
     });
   }
 
+  async findByManager(managerId: number) {
+    const manager = await this.findOne(managerId);
+
+    return this.userRepository.find({ where: { manager } });
+  }
   async findOne(id: number) {
     return this.userRepository.findOneOrFail({
       where: { id },
@@ -91,8 +98,36 @@ export class UserService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user ${updateUserDto}`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userEntity = await this.userRepository.findOneByOrFail({ id });
+
+    const { countryCode, managerId, ...rest } = updateUserDto;
+
+    if (countryCode) {
+      const country = await this.countryServices.findByCountryCode(countryCode);
+      userEntity.country = country;
+    }
+
+    if (managerId) {
+      const manager = await this.userRepository.findOneByOrFail({
+        id: managerId,
+      });
+
+      // checking ig the provided manager has proper roles
+      if (
+        !this.accAccessControlService.isAuthorized({
+          currentRole: manager.role,
+          requiredRole: Role.MANAGER,
+        })
+      ) {
+        throw new BadRequestException(
+          'The provided user To be the manager does not have enough privilages ',
+        );
+      }
+      userEntity.manager = manager;
+    }
+
+    return this.userRepository.save({ ...userEntity, ...rest });
   }
 
   async remove(id: number) {

@@ -61,4 +61,15 @@ export class LeaveRecord extends AbstractEntity<LeaveRecord> {
   updateCount() {
     this.count = calculateDaysInRange(this.startDate, this.endDate);
   }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  validateDate() {
+    const startDate = new Date(this.startDate);
+    const endDate = new Date(this.endDate);
+
+    if (endDate < startDate) {
+      throw new TypeError('start Date must be before end date');
+    }
+  }
 }

@@ -20,7 +20,7 @@ export class LeavePolicy extends AbstractEntity<LeavePolicy> {
   @JoinColumn({ name: 'fiscal_year' })
   fiscalYear: FiscalYear; // kun year ra country ko ho
 
-  @ManyToOne(() => LeaveType, (leaveType) => leaveType.id, {
+  @ManyToOne(() => LeaveType, (leaveType) => leaveType.leavePolicy, {
     nullable: false,
   })
   @JoinColumn({ name: 'leave_type' })

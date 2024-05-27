@@ -16,6 +16,25 @@ export class UserLeaveService {
     private readonly leavePolicyService: LeavePolicyService,
   ) {}
 
+  private findAllQueryBuilder() {
+    return this.userLeaveRepository
+      .createQueryBuilder('ul')
+      .select([
+        'ul.id as userLeaveId',
+        'u.id as userId',
+        'u.username as username',
+        'lt.id AS leaveTypeId',
+        'lt.type AS leaveType',
+        'ul.additional_days + lp.count AS totalLeaves',
+        'COALESCE(SUM(lr.count), 0) AS leavesTaken',
+      ])
+      .innerJoin('ul.user', 'u')
+      .innerJoin('ul.leavePolicy', 'lp')
+      .innerJoin('lp.leaveType', 'lt')
+      .leftJoin('ul.leaveRecords', 'lr')
+      .groupBy('ul.id, u.id, lt.id');
+  }
+
   async create(createUserLeaveDto: CreateUserLeaveDto) {
     const { userId, leavePolicyId, ...rest } = createUserLeaveDto;
 
@@ -31,18 +50,44 @@ export class UserLeaveService {
     await this.userLeaveRepository.insert(userLeave);
   }
 
-  findAll() {
-    return this.userLeaveRepository.find({
-      relations: { leavePolicy: true, user: true },
+  async findAll() {
+    const res = await this.findAllQueryBuilder()
+      .orderBy('ul.id', 'ASC')
+      .getRawMany();
+
+    return res;
+  }
+
+  async findOne(id: number) {
+    return this.userLeaveRepository.findOneOrFail({
+      where: { id },
+      select: {
+        leavePolicy: {
+          count: true,
+          id: true,
+          cashable: true,
+          leaveType: { type: true, id: true },
+        },
+        user: {
+          id: true,
+          email: true,
+          username: true,
+          leaveRecord: true,
+        },
+      },
+      relations: {
+        leavePolicy: { leaveType: true },
+        user: { leaveRecord: true },
+      },
     });
   }
 
-  findOne(id: number) {
-    return this.userLeaveRepository.findOneOrFail({
-      where: { id },
-
-      relations: { leavePolicy: true, user: true },
-    });
+  async findAllLeavePolicyOfUser(userId: number) {
+    const res = await this.findAllQueryBuilder()
+      .orderBy('ul.id', 'ASC')
+      .andWhere('u.id=:userId', { userId })
+      .getRawMany();
+    return res;
   }
 
   async update(id: number, updateUserLeaveDto: UpdateUserLeaveDto) {

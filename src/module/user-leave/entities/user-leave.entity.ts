@@ -14,7 +14,7 @@ import {
 @Entity()
 @Unique('user_leave_policy', ['user', 'leavePolicy'])
 export class UserLeave extends AbstractEntity<UserLeave> {
-  @Column({ default: 0, name: 'additional_days' })
+  @Column({ default: 0, type: 'tinyint', name: 'additional_days' })
   additionalDays?: number;
 
   @ManyToOne(() => Users, (user) => user.id)

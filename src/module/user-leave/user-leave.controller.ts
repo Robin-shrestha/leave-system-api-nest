@@ -44,8 +44,8 @@ export class UserLeaveController {
   @Get('user/:userId')
   @Roles(Role.USER)
   @ApiOperation({ summary: 'Get User leave Policies of a specific user' })
-  findAllUserLeavePolicyByUser(@Param('userId', ParseIntPipe) userId: string) {
-    throw new Error('Not implemented');
+  findAllUserLeavePolicyByUser(@Param('userId', ParseIntPipe) userId: number) {
+    return this.userLeaveService.findAllLeavePolicyOfUser(userId);
   }
 
   @Patch(':id')
