@@ -1,15 +1,15 @@
-import { RejectLeaveRecordDto } from './dto/reject-leave-record.dto';
+import { calculateDaysInRange } from 'src/utils';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LeaveStatus, Role } from 'src/types/enums';
+import { JWTUser } from '../auth/types/profile.type';
+import { Users } from '../user/entities/users.entity';
+import { LeaveRecord } from './entities/leave-record.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { RejectLeaveRecordDto } from './dto/reject-leave-record.dto';
 import { CreateLeaveRecordDto } from './dto/create-leave-record.dto';
 import { UpdateLeaveRecordDto } from './dto/update-leave-record.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LeaveRecord, LeaveStatus } from './entities/leave-record.entity';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { calculateDaysInRange } from 'src/utils';
 import { UserLeave } from '../user-leave/entities/user-leave.entity';
-import { JWTUser } from '../auth/types/profile.type';
-import { Role } from 'src/types/enums';
-import { Users } from '../user/entities/users.entity';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class LeaveRecordService {
@@ -30,6 +30,9 @@ export class LeaveRecordService {
           .select('SUM(leaveRecord.count) as usedLeaves')
           .where('leaveRecord.user_leave_policy = :userLeaveId', {
             userLeaveId: userLeavePolicyId,
+          })
+          .andWhere('leaveRecord.status != :status', {
+            status: LeaveStatus.REJECTED,
           })
           .getRawOne<{ usedLeaves: number | null }>()
       ).usedLeaves || 0;
@@ -54,6 +57,7 @@ export class LeaveRecordService {
     const leavesTaken = await this.leavesTakenForUserLeavePolicy(
       userLeavePolicy.id,
     );
+    console.log('🚀 ~ LeaveRecordService ~ leavesTaken:', leavesTaken);
 
     if (appliedLeaveCount > totalLeaveForUser - Number(leavesTaken)) {
       throw new BadRequestException('Not enough available Leaves!');

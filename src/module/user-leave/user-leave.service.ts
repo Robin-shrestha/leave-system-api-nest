@@ -31,7 +31,11 @@ export class UserLeaveService {
       .innerJoin('ul.user', 'u')
       .innerJoin('ul.leavePolicy', 'lp')
       .innerJoin('lp.leaveType', 'lt')
-      .leftJoin('ul.leaveRecords', 'lr')
+      .leftJoin(
+        'ul.leaveRecords',
+        'lr',
+        'lr.userLeave = ul.id and lr.status != "rejected"',
+      )
       .groupBy('ul.id, u.id, lt.id');
   }
 

@@ -1,7 +1,8 @@
+import { LeaveStatus } from 'src/types/enums';
+import { calculateDaysInRange } from 'src/utils';
+import { Users } from 'src/module/user/entities/users.entity';
 import { AbstractEntity } from 'src/module/database/abstract.entity';
 import { UserLeave } from 'src/module/user-leave/entities/user-leave.entity';
-import { Users } from 'src/module/user/entities/users.entity';
-import { calculateDaysInRange } from 'src/utils';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -12,12 +13,6 @@ import {
   ManyToOne,
   Unique,
 } from 'typeorm';
-
-export enum LeaveStatus {
-  PENDING = 'pending',
-  APPROVED = 'approved',
-  REJECTED = 'rejected',
-}
 
 @Entity()
 @Unique('unique_leaves', ['startDate', 'endDate', 'userLeave'])

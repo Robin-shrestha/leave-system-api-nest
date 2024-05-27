@@ -37,6 +37,7 @@ export class AuthService {
       relations: { country: true },
     });
 
+    // can remove this if we don't want automatic user creation which we probably should
     if (!existingUser) {
       return this.googleRegisterUser(user);
     }
