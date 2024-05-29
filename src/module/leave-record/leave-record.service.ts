@@ -22,7 +22,7 @@ export class LeaveRecordService {
     private readonly userRepository: Repository<Users>,
   ) {}
 
-  private async leavesTakenForUserLeavePolicy(userLeavePolicyId: number) {
+  async leavesTakenForUserLeavePolicy(userLeavePolicyId: number) {
     const leavesTaken =
       (
         await this.leaveRecordRepository

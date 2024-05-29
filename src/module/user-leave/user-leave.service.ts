@@ -1,11 +1,13 @@
 import { LeavePolicyService } from './../leave-policy/leave-policy.service';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserLeaveDto } from './dto/create-user-leave.dto';
 import { UpdateUserLeaveDto } from './dto/update-user-leave.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserLeave } from './entities/user-leave.entity';
 import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
+import { LeaveTransferDTO } from './dto/leave-transfer-dto';
+import { LeaveRecordService } from '../leave-record/leave-record.service';
 
 @Injectable()
 export class UserLeaveService {
@@ -14,6 +16,7 @@ export class UserLeaveService {
     private userLeaveRepository: Repository<UserLeave>,
     private readonly userServices: UserService,
     private readonly leavePolicyService: LeavePolicyService,
+    private readonly leaveRecordService: LeaveRecordService,
   ) {}
 
   private findAllQueryBuilder() {
@@ -116,5 +119,60 @@ export class UserLeaveService {
 
   async remove(id: number) {
     await this.userLeaveRepository.softDelete(id);
+  }
+
+  async transferLeave(leaveTransferDto: LeaveTransferDTO) {
+    const { currentUserLeavePolicyId, nextUserLeavePolicyId } =
+      leaveTransferDto;
+
+    const currentUserLeavePolicy = await this.userLeaveRepository.findOneOrFail(
+      {
+        where: { id: currentUserLeavePolicyId },
+        relations: {
+          leavePolicy: { fiscalYear: true, leaveType: true },
+        },
+      },
+    );
+
+    // check if transferrable
+    if (!currentUserLeavePolicy.leavePolicy.maxTransferable) {
+      throw new BadRequestException('this type of leave is not transferrable');
+    }
+
+    const targetUserLeavePolicy = await this.userLeaveRepository.findOneOrFail({
+      where: { id: nextUserLeavePolicyId },
+      relations: {
+        leavePolicy: { leaveType: true, fiscalYear: true },
+      },
+    });
+
+    // checks if new policy takes place is after current
+    if (
+      new Date(currentUserLeavePolicy.leavePolicy.fiscalYear.endDate) >
+      new Date(targetUserLeavePolicy.leavePolicy.fiscalYear.startDate)
+    ) {
+      throw new BadRequestException('cant transfer leave to past policies');
+    }
+
+    const leavesTaken =
+      await this.leaveRecordService.leavesTakenForUserLeavePolicy(
+        currentUserLeavePolicyId,
+      );
+
+    const maxTransferrableLeaves =
+      currentUserLeavePolicy.leavePolicy.maxTransferable;
+
+    const transferrableLeaveCount = Math.min(
+      maxTransferrableLeaves,
+      currentUserLeavePolicy.additionalDays +
+        currentUserLeavePolicy.leavePolicy.count -
+        leavesTaken,
+    );
+
+    await this.userLeaveRepository.save({
+      ...targetUserLeavePolicy,
+      additionalDays:
+        targetUserLeavePolicy.additionalDays + transferrableLeaveCount,
+    });
   }
 }

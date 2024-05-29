@@ -14,6 +14,7 @@ import { Roles } from '../auth/decorators/Roles.decorator';
 import { CreateUserLeaveDto } from './dto/create-user-leave.dto';
 import { UpdateUserLeaveDto } from './dto/update-user-leave.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LeaveTransferDTO } from './dto/leave-transfer-dto';
 
 @ApiBearerAuth()
 @ApiTags('User Leave')
@@ -55,6 +56,12 @@ export class UserLeaveController {
     @Body() updateUserLeaveDto: UpdateUserLeaveDto,
   ) {
     return this.userLeaveService.update(+id, updateUserLeaveDto);
+  }
+
+  @Patch('transfer/')
+  @Roles(Role.USER)
+  transferLeaves(@Body() payload: LeaveTransferDTO) {
+    return this.userLeaveService.transferLeave(payload);
   }
 
   @Delete(':id')
