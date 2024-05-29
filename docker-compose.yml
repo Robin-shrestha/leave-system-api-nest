@@ -7,6 +7,6 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - '~/Projects/gap-projects/db/mysql/:/var/lib/mysql'
+      - './db/mysql/:/var/lib/mysql'
     env_file:
       - .env.docker
